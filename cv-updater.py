@@ -4,6 +4,14 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+USERNAME = config['credentials']['username']
+PASSWORD = config['credentials']['password']
+CVPATH = config['filepaths']['cvpath']
 
 
 options = Options()
@@ -24,10 +32,10 @@ try:
 except Exception as e:
 	print(e)
 finally:
-	browser.find_element_by_id('usernameField').send_keys('abc@def.com')
+	browser.find_element_by_id('usernameField').send_keys(USERNAME)
 	# time.sleep(4)
 	passwd = browser.find_element_by_id('passwordField')
-	passwd.send_keys('123456')
+	passwd.send_keys(PASSWORD)
 
 	time.sleep(3)
 	# passwd.submit()
@@ -55,7 +63,7 @@ except Exception as e:
 	print(e)
 finally:
 	# time.sleep(4)
-	browser.find_element_by_id("attachCV").send_keys("Resume.docx")
+	browser.find_element_by_id("attachCV").send_keys(CVPATH)
 	# time.sleep(2)
 
 
