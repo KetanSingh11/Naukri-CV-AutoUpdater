@@ -1,0 +1,6 @@
+[credentials]
+username=john@dow.com
+password=1234
+
+[filepaths]
+cvpath=C:\resume.docx
