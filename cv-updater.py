@@ -1,10 +1,15 @@
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import configparser
+import os
+import sys
+import time
+import platform
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -13,12 +18,27 @@ USERNAME = config['credentials']['username']
 PASSWORD = config['credentials']['password']
 CVPATH = config['filepaths']['cvpath']
 
+if not os.path.isfile(CVPATH):
+	print("Error! File not found: '{}'".format(CVPATH))
+	sys.exit(1)
 
+#default to windows
+geckodriver_binary = "geckodriver/geckodriver.exe"
+
+if platform.system().lower() == 'linux':
+	geckodriver_binary = "geckodriver/geckodriver"
+elif platform.system().lower() == 'windows':
+	odriver_binary = "geckodriver/geckodriver.exe"
+else:
+	print("Error! Unable to determine underlying operating system type.")
+	sys.exit(1)
+
+print("Running on: {}".format(platform.system()))
 options = Options()
 # options.set_headless(headless=True)
 ## options.add_argument("--headless")
 
-browser = webdriver.Firefox(firefox_options=options, executable_path="geckodriver/geckodriver.exe", log_path="geckodriver/geckodriver.log")
+browser = webdriver.Firefox(firefox_options=options, executable_path=geckodriver_binary, log_path="geckodriver/geckodriver.log")
 # assert options.headless  # operating in headless mode
 print("Firefox Headless Browser Invoked")
 # browser.implicitly_wait(10) # seconds
